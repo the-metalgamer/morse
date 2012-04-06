@@ -151,7 +151,6 @@ def encode(string=""):
         morseword = []
         for letter in letters:
             morseletter = alphabet_to_morse[letter]
-            #print(letter," ",morseletter)
             morseword.append(morseletter)
 
         word = "/".join(morseword)
@@ -169,7 +168,6 @@ def decode(string=""):
 
         characterword = []
         for letter in letters:
-            #print(letter)
             characterletter = morse_to_alphabet[letter]
             characterword.append(characterletter)
 
