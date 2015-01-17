@@ -4,39 +4,23 @@ import inspect
 import re
 
 class TestTranslationMaps(unittest.TestCase):
-
-    def test_alphabet_intersect(self):
-        # make sure we have the info to translate back and forth
-        alphabet_keys = morse.alphabet_to_morse.keys()
-        alphabet_values = morse.morse_to_alphabet.values()
-        for k in alphabet_keys:
-            self.assertIn(k, alphabet_values)
-
-    def test_morse_intersect(self):
-        # make sure we have the info to translate back and forth
-        morse_keys = morse.morse_to_alphabet.keys()
-        morse_values = morse.alphabet_to_morse.values()
-        for k in morse_keys:
-            self.assertIn(k, morse_values)
     
     def test_convert_twice(self):
+        """We should be able to convert all charaters to morse and back"""
         alphabet_keys = morse.alphabet_to_morse.keys()
         for k in alphabet_keys:
             m = morse.alphabet_to_morse[k]
-            k2 = morse.morse_to_alphabet[m]
-            self.assertEqual(k, k2)
+            self.assertEqual(k, morse.morse_to_alphabet[m])
 
     def test_dup_keys(self):
-        def test_dict(name):
-            code = inspect.getsource(morse)
-            dict_code = re.findall(name + " = {.*?}", code, re.MULTILINE|re.DOTALL)[0]
-            keys = re.findall("\"(.*?)\":", dict_code)
-            viewed = set()
-            for k in keys:
-                self.assertNotIn(k, viewed)
-                viewed.add(k)
-        test_dict("alphabet_to_morse")
-        test_dict("morse_to_alphabet")
+        """Both mappings should have the same amount of keys or there is probably a duplicate key"""
+        self.assertEqual( len(morse.alphabet_to_morse), len(morse.morse_to_alphabet))
+
+    def test_encode(self):
+        phrase = "The quick red fox jumped over the lazy dog 1234567890"
+        encoded = morse.encode(phrase)
+        decoded = morse.decode(encoded)
+        self.assertEqual(phrase.lower(), decoded.lower())
 
 if __name__ == '__main__':
     unittest.main()
