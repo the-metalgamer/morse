@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import string
-
 alphabet_to_morse = {
     "A": ".-",
     "B": "-...",
@@ -60,30 +58,24 @@ alphabet_to_morse = {
     "+": ".-.-.",
     "/": "-..-.",
     "@": ".--.-.",
-    "Ñ": "--.--"
+    "Ñ": "--.--",
+    " ": " ",
+    "" : ""
 }
 
 morse_to_alphabet = {v: k for k, v in alphabet_to_morse.iteritems()}
 
 
 def removeunusablecharacters(uncorrected_string):
-    
-    correctedstring = uncorrected_string
-
-    unusablecharacters = "§!\"#$%&*<>[\]^`{|}~"
-    #print(unusablecharacters)
-    for i in unusablecharacters:
-        correctedstring = correctedstring.replace(i,"")
-
-    return correctedstring
+    return filter(lambda char: char in alphabet_to_morse, uncorrected_string.upper())
 
 
-def encode(string=""):
+def encode(decoded):
     morsestring = []
 
-    string = removeunusablecharacters(string)
-    string = string.upper()
-    words = string.split(" ")
+    decoded = removeunusablecharacters(decoded)
+    decoded = decoded.upper()
+    words = decoded.split(" ")
     for word in words:
         letters = list(word)
 
@@ -95,13 +87,13 @@ def encode(string=""):
         word = "/".join(morseword)
         morsestring.append(word)
 
-    return "//".join(morsestring)
+    return " ".join(morsestring)
 
 
-def decode(string=""):
+def decode(encoded):
     characterstring = []
 
-    words = string.split("//")
+    words = encoded.split(" ")
     for word in words:
         letters = word.split("/")
 
@@ -114,20 +106,3 @@ def decode(string=""):
         characterstring.append(word)
 
     return " ".join(characterstring)
-
-def _check(string=""):
-
-    teststring = removeunusablecharacters(string)
-    encodestring = encode(string)
-    decodestring = decode(encodestring)
-
-    print(string)
-    print(teststring)
-    print(encodestring)
-    print(decodestring)
-
-    if teststring.upper() == decodestring:
-        return True
-    else:
-        return False
-
